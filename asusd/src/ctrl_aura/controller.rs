@@ -13,7 +13,7 @@ use rog_platform::keyboard_led::KeyboardLed;
 use super::config::{AuraConfig, AuraPowerConfig};
 use crate::error::RogError;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug)]
 pub enum LEDNode {
     KbdLed(KeyboardLed),
     Rog(HidRaw),

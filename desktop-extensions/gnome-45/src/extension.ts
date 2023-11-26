@@ -29,19 +29,23 @@ export default class AsusExtension extends Extension {
   async enable() {
     log(this.path);
 
-    this.dbus_platform = new DbusBase("org-asuslinux-platform-4.xml", "/org/asuslinux/Platform");
-    await this.dbus_platform.start();
+    if (this.dbus_platform == undefined) {
+      this.dbus_platform = new DbusBase("org-asuslinux-platform-4.xml", "/org/asuslinux/Platform");
+      await this.dbus_platform.start();
+    }
 
-    this.dbus_anime = new DbusBase("org-asuslinux-anime-4.xml", "/org/asuslinux/Anime");
-    await this.dbus_anime.start();
+    if (this.dbus_anime == undefined) {
+      this.dbus_anime = new DbusBase("org-asuslinux-anime-4.xml", "/org/asuslinux/Anime");
+      await this.dbus_anime.start();
+    }
 
     this.supported_interfaces = this.dbus_platform?.proxy.SupportedInterfacesSync()[0];
     this.supported_properties = this.dbus_platform?.proxy.SupportedPropertiesSync()[0];
     log(this.supported_interfaces);
     log(this.supported_properties);
 
-    new AsusIndicator("selection-mode-symbolic", "mini-led-enabled");
-    new AsusIndicator("selection-mode-symbolic", "panel-od-enabled");
+    // new AsusIndicator("selection-mode-symbolic", "mini-led-enabled");
+    // new AsusIndicator("selection-mode-symbolic", "panel-od-enabled");
 
     if (!this.individual) {
       if (this.feature_menu == null)
@@ -112,6 +116,12 @@ export default class AsusExtension extends Extension {
     this.dbus_platform?.stop();
     this.dbus_anime?.stop();
 
-    // this.feature_menu?.destroy();
+    this.feature_menu?.destroy();
+    feature_menu?.destroy();
+    panel_od?.destroy();
+    mini_led?.destroy();
+    anime_display?.destroy();
+    anime_builtins?.destroy();
+    charge_thres?.destroy();
   }
 }
