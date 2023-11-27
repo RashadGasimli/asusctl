@@ -473,11 +473,16 @@ impl crate::Reloadable for CtrlPlatform {
         }
 
         if self.platform.has_throttle_thermal_policy() {
-            // TODO: get power status and select from that
-            let throt: PlatformPolicy = self.config.lock().await.platform_policy_to_restore;
-            self.platform.set_throttle_thermal_policy(throt.into())?;
-            if let Some(cpu) = self.cpu_control.as_ref() {
-                cpu.set_epp(throt.into())?;
+            if let Ok(ac) = self.power.get_online() {
+                let profile = if ac == 1 {
+                    self.config.lock().await.platform_policy_on_ac
+                } else {
+                    self.config.lock().await.platform_policy_on_battery
+                };
+                self.platform.set_throttle_thermal_policy(profile.into())?;
+                if let Some(cpu) = self.cpu_control.as_ref() {
+                    cpu.set_epp(profile.into())?;
+                }
             }
         }
 
