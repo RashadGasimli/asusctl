@@ -4,27 +4,14 @@ use rog_platform::platform::{GpuMode, PlatformPolicy};
 use crate::system_state::SystemState;
 
 pub fn platform_profile(states: &mut SystemState, ui: &mut Ui) {
-    if let Some(mut throt) = states.bios.throttle {
+    if let Some(mut throttle) = states.bios.throttle {
         ui.heading("Platform profile");
 
-        let mut changed = false;
         let mut item = |p: PlatformPolicy, ui: &mut Ui| {
             if ui
-                .selectable_value(&mut throt, p, format!("{p:?}"))
+                .selectable_value(&mut throttle, p, format!("{p:?}"))
                 .clicked()
             {
-                changed = true;
-            }
-        };
-
-        ui.horizontal_wrapped(|ui| {
-            for a in PlatformPolicy::list() {
-                item(a, ui);
-            }
-        });
-
-        if changed {
-            if let Some(throttle) = states.bios.throttle {
                 states
                     .asus_dbus
                     .proxies()
@@ -36,6 +23,12 @@ pub fn platform_profile(states: &mut SystemState, ui: &mut Ui) {
                     .ok();
             }
         };
+
+        ui.horizontal_wrapped(|ui| {
+            for a in PlatformPolicy::list() {
+                item(a, ui);
+            }
+        });
     }
 }
 
