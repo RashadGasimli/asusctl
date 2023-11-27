@@ -169,7 +169,7 @@ impl eframe::App for RogApp {
                     Page::AppSettings => self.app_settings_page(&mut states, ctx),
                     Page::System => self.system_page(&mut states, ctx),
                     Page::AuraEffects => self.aura_page(&mut states, ctx),
-                    Page::AnimeMatrix => todo!(),
+                    Page::AnimeMatrix => self.anime_page(ctx),
                     Page::FanCurves => self.fan_curve_page(&mut states, ctx),
                 };
             }
