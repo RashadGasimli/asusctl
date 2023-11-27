@@ -473,6 +473,7 @@ impl crate::Reloadable for CtrlPlatform {
         }
 
         if self.platform.has_throttle_thermal_policy() {
+            // TODO: get power status and select from that
             let throt: PlatformPolicy = self.config.lock().await.platform_policy_to_restore;
             self.platform.set_throttle_thermal_policy(throt.into())?;
             if let Some(cpu) = self.cpu_control.as_ref() {

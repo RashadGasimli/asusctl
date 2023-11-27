@@ -41,6 +41,6 @@
     <property name="PptPl1Spl" type="y" access="readwrite"/>
     <property name="PptPl2Sppt" type="y" access="readwrite"/>
     <property name="PptPlatformSppt" type="y" access="readwrite"/>
-    <property name="PlatformPolicy" type="s" access="readwrite"/>
+    <property name="ThrottleThermalPolicy" type="s" access="readwrite"/>
   </interface>
 </node>
