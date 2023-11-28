@@ -81,7 +81,7 @@ fn main() -> Result<()> {
         })
         .unwrap();
 
-    let supported = match dbus.proxies().platform().supported_properties() {
+    let supported_properties = match dbus.proxies().platform().supported_properties() {
         Ok(s) => s,
         Err(e) => {
             eframe::run_native(
@@ -188,7 +188,7 @@ fn main() -> Result<()> {
     )?;
 
     if config.enable_tray_icon {
-        init_tray(supported, states.clone());
+        init_tray(supported_properties, states.clone());
     }
 
     let mut bg_check_spawned = false;

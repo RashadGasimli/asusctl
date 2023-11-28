@@ -276,13 +276,12 @@ impl SystemState {
         run_in_bg: bool,
     ) -> Result<Self> {
         let (asus_dbus, conn) = RogDbusClientBlocking::new()?;
-        let mut error = None;
         let gfx_dbus = GfxProxyBlocking::new(&conn).expect("Couldn't connect to supergfxd");
+
         let aura = AuraState::new(&keyboard_layout, &asus_dbus)
             .map_err(|e| {
                 let e = format!("Could not get AuraState state: {e}");
                 error!("{e}");
-                error = Some(e);
             })
             .unwrap_or_default();
 
@@ -293,7 +292,6 @@ impl SystemState {
                 .map_err(|e| {
                     let e = format!("Could not get BiosState state: {e}");
                     error!("{e}");
-                    error = Some(e);
                 })
                 .unwrap_or_default(),
             aura,
@@ -301,24 +299,21 @@ impl SystemState {
                 .map_err(|e| {
                     let e = format!("Could not get AanimeState state: {e}");
                     error!("{e}");
-                    error = Some(e);
                 })
                 .unwrap_or_default(),
             fan_curves: FanCurvesState::new(&asus_dbus)
                 .map_err(|e| {
                     let e = format!("Could not get FanCurvesState state: {e}");
                     error!("{e}");
-                    error = Some(e);
                 })
                 .unwrap_or_default(),
             gfx_state: GfxState::new(&gfx_dbus)
                 .map_err(|e| {
                     let e = format!("Could not get supergfxd state: {e}");
                     error!("{e}");
-                    error = Some(e);
                 })
                 .unwrap_or_default(),
-            error,
+            error: None,
             tray_should_update: true,
             app_should_update: true,
             asus_dbus,
